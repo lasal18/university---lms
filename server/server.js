@@ -23,6 +23,7 @@ app.get('/', (req, res) => {
 
 // Routes configuration (to be defined next)
 app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/courses', require('./routes/courseRoutes'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -1,6 +1,9 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
+// Configure axios base URL for production hosting/deployment flexibility
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || '';
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {

@@ -1,37 +1,12 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 
 const Dashboard = () => {
   const { user, logout } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState('courses');
-  
-  // Local state for courses (starts with beautiful demo courses, updates when created)
-  const [courses, setCourses] = useState([
-    {
-      id: 1,
-      title: 'Introduction to Computer Science (CS101)',
-      description: 'Learn the fundamentals of programming using Python, algorithms, data structures, and basic software engineering concepts.',
-      department: 'Computer Science',
-      instructor: 'Dr. Evelyn Harris',
-      studentsEnrolled: 42
-    },
-    {
-      id: 2,
-      title: 'Advanced Web Engineering (CS350)',
-      description: 'Master full-stack development using the MERN stack. Covering React components, Node server design, security best practices, and production hosting.',
-      department: 'Software Engineering',
-      instructor: 'Prof. Julian Vance',
-      studentsEnrolled: 28
-    },
-    {
-      id: 3,
-      title: 'Database Management Systems (CS204)',
-      description: 'A study of relational and non-relational database architectures, focusing on SQL, schema optimization, and NoSQL engines like MongoDB.',
-      department: 'Computer Science',
-      instructor: 'Dr. Evelyn Harris',
-      studentsEnrolled: 35
-    }
-  ]);
+  const [courses, setCourses] = useState([]);
+  const [loadingCourses, setLoadingCourses] = useState(true);
 
   // Form states for creating a course
   const [newTitle, setNewTitle] = useState('');
@@ -39,24 +14,59 @@ const Dashboard = () => {
   const [newDept, setNewDept] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const handleCreateCourse = (e) => {
+  // Fetch courses from Backend API
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const res = await axios.get('/api/courses');
+        setCourses(res.data);
+      } catch (err) {
+        console.error('Error fetching courses:', err);
+      } finally {
+        setLoadingCourses(false);
+      }
+    };
+    fetchCourses();
+  }, []);
+
+  const handleEnroll = async (courseId) => {
+    try {
+      const res = await axios.post(`/api/courses/${courseId}/enroll`);
+      setCourses(courses.map(course => {
+        if (course._id === courseId) {
+          return {
+            ...course,
+            isEnrolled: true,
+            studentsEnrolledCount: res.data.studentsEnrolledCount
+          };
+        }
+        return course;
+      }));
+    } catch (err) {
+      console.error('Error enrolling:', err);
+      alert(err.response?.data?.message || 'Failed to enroll');
+    }
+  };
+
+  const handleCreateCourse = async (e) => {
     e.preventDefault();
     if (!newTitle || !newDesc || !newDept) return;
 
-    const newCourse = {
-      id: courses.length + 1,
-      title: newTitle,
-      description: newDesc,
-      department: newDept,
-      instructor: user?.name || 'Instructor',
-      studentsEnrolled: 0
-    };
-
-    setCourses([newCourse, ...courses]);
-    setNewTitle('');
-    setNewDesc('');
-    setNewDept('');
-    setShowCreateModal(false);
+    try {
+      const res = await axios.post('/api/courses', {
+        title: newTitle,
+        description: newDesc,
+        department: newDept
+      });
+      setCourses([res.data, ...courses]);
+      setNewTitle('');
+      setNewDesc('');
+      setNewDept('');
+      setShowCreateModal(false);
+    } catch (err) {
+      console.error('Error creating course:', err);
+      alert(err.response?.data?.message || 'Failed to create course');
+    }
   };
 
   return (
@@ -178,23 +188,48 @@ const Dashboard = () => {
             )}
 
             {/* Grid of Courses */}
-            <div className="course-grid">
-              {courses.map((course) => (
-                <div key={course.id} className="course-card glass-panel">
-                  <span className="badge badge-blue" style={{ width: 'fit-content', marginBottom: '1rem' }}>
-                    {course.department}
-                  </span>
-                  <h3 className="course-title">{course.title}</h3>
-                  <p className="course-desc">{course.description}</p>
-                  <div className="course-footer">
-                    <span style={{ color: 'var(--text-muted)' }}>👤 {course.instructor}</span>
-                    <span style={{ color: 'var(--secondary)', fontWeight: '600' }}>
-                      🎓 {course.studentsEnrolled} enrolled
-                    </span>
+            {loadingCourses ? (
+              <div style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>Loading courses...</div>
+            ) : courses.length === 0 ? (
+              <div className="glass-panel" style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+                No courses published yet.
+              </div>
+            ) : (
+              <div className="course-grid">
+                {courses.map((course) => (
+                  <div key={course._id} className="course-card glass-panel" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'between' }}>
+                    <div>
+                      <span className="badge badge-blue" style={{ width: 'fit-content', marginBottom: '1rem' }}>
+                        {course.department}
+                      </span>
+                      <h3 className="course-title">{course.title}</h3>
+                      <p className="course-desc">{course.description}</p>
+                    </div>
+                    
+                    <div style={{ marginTop: 'auto' }}>
+                      <div className="course-footer" style={{ marginBottom: '1rem' }}>
+                        <span style={{ color: 'var(--text-muted)' }}>👤 {course.instructor}</span>
+                        <span style={{ color: 'var(--secondary)', fontWeight: '600' }}>
+                          🎓 {course.studentsEnrolledCount} enrolled
+                        </span>
+                      </div>
+
+                      {user?.role === 'student' && (
+                        course.isEnrolled ? (
+                          <button className="btn btn-secondary" style={{ width: '100%', cursor: 'default' }} disabled>
+                            ✓ Enrolled
+                          </button>
+                        ) : (
+                          <button className="btn btn-primary" style={{ width: '100%' }} onClick={() => handleEnroll(course._id)}>
+                            Enroll Course
+                          </button>
+                        )
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </>
         ) : (
           <div>
