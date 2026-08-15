@@ -4,6 +4,7 @@ import { AuthProvider, AuthContext } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Landing from './pages/Landing';
 
 // Route guard component to check if user is logged in
 const ProtectedRoute = ({ children }) => {
@@ -36,13 +37,14 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          {/* Public Authentication Pages */}
+          {/* Public Pages */}
+          <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
           {/* Protected Dashboard Route */}
           <Route
-            path="/"
+            path="/dashboard"
             element={
               <ProtectedRoute>
                 <Dashboard />
