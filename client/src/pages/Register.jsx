@@ -97,7 +97,8 @@ const Register = () => {
               style={{ appearance: 'none', backgroundImage: 'none' }}
             >
               <option value="student" style={{ background: '#111827' }}>Student</option>
-              <option value="instructor" style={{ background: '#111827' }}>Instructor</option>
+              <option value="lecturer" style={{ background: '#111827' }}>Lecturer</option>
+              <option value="admin" style={{ background: '#111827' }}>Administrator</option>
             </select>
           </div>
 

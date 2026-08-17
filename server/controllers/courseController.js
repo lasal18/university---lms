@@ -31,22 +31,29 @@ exports.getCourses = async (req, res) => {
 
 // @desc    Create a new course
 // @route   POST /api/courses
-// @access  Private (Instructor only)
+// @access  Private (Admin & Lecturers only)
 exports.createCourse = async (req, res) => {
   try {
-    const { title, description, department } = req.body;
+    const { title, description, department, moduleCode } = req.body;
 
     if (!title || !description || !department) {
       return res.status(400).json({ message: 'Please provide title, description, and department' });
     }
 
-    const course = await Course.create({
+    const courseData = {
       title,
       description,
       department,
-      instructor: req.user.id,
+      moduleCode: moduleCode || '',
       studentsEnrolled: []
-    });
+    };
+
+    // If creator is lecturer/instructor, set as initial instructor
+    if (req.user.role !== 'admin') {
+      courseData.instructor = req.user.id;
+    }
+
+    const course = await Course.create(courseData);
 
     // Populate instructor info to return back to frontend
     const populatedCourse = await Course.findById(course._id).populate('instructor', 'name');
@@ -56,7 +63,8 @@ exports.createCourse = async (req, res) => {
       title: populatedCourse.title,
       description: populatedCourse.description,
       department: populatedCourse.department,
-      instructor: populatedCourse.instructor ? populatedCourse.instructor.name : 'Unknown Instructor',
+      moduleCode: populatedCourse.moduleCode || '',
+      instructor: populatedCourse.instructor ? populatedCourse.instructor.name : 'Unassigned',
       studentsEnrolledCount: 0,
       isEnrolled: false,
       studentsEnrolled: []

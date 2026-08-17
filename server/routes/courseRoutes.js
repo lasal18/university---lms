@@ -6,10 +6,10 @@ const { protect, authorize } = require('../middleware/authMiddleware');
 // All course routes require authentication
 router.use(protect);
 
-// Get all courses & Create a course (Instructor only)
+// Get all courses & Create a course (Admin & Lecturers only)
 router.route('/')
   .get(getCourses)
-  .post(authorize('instructor'), createCourse);
+  .post(authorize('admin', 'lecturer', 'instructor'), createCourse);
 
 // Enroll in a course (Student only)
 router.route('/:id/enroll')

@@ -30,12 +30,25 @@ const protect = async (req, res, next) => {
   }
 };
 
-// Middleware to authorize specific roles (e.g. instructor, admin)
+// Middleware to authorize specific roles (e.g. lecturer, instructor, admin)
 const authorize = (...roles) => {
   return (req, res, next) => {
-    if (!req.user || !roles.includes(req.user.role)) {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Not authorized, no user' });
+    }
+    
+    const userRole = req.user.role;
+    const allowedRoles = [...roles];
+    if (roles.includes('lecturer') && !allowedRoles.includes('instructor')) {
+      allowedRoles.push('instructor');
+    }
+    if (roles.includes('instructor') && !allowedRoles.includes('lecturer')) {
+      allowedRoles.push('lecturer');
+    }
+    
+    if (!allowedRoles.includes(userRole)) {
       return res.status(403).json({
-        message: `User role '${req.user ? req.user.role : 'none'}' is not authorized to access this route`
+        message: `User role '${userRole}' is not authorized to access this route`
       });
     }
     next();

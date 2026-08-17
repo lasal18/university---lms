@@ -23,13 +23,29 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['student', 'instructor', 'admin'],
+    enum: ['student', 'lecturer', 'admin', 'instructor'],
     default: 'student'
+  },
+  studentId: {
+    type: String
+  },
+  lecturerId: {
+    type: String
+  },
+  registrationNumber: {
+    type: String
+  },
+  status: {
+    type: String,
+    enum: ['active', 'deactivated'],
+    default: 'active'
   },
   createdAt: {
     type: Date,
     default: Date.now
   }
+}, {
+  timestamps: true
 });
 
 // Encrypt password using bcrypt before saving
