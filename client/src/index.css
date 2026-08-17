@@ -723,3 +723,111 @@ body {
     gap: 3rem;
   }
 }
+
+/* ==========================================
+   Responsive Dashboard & Portals Layouts
+   ========================================== */
+@media (max-width: 768px) {
+  .dashboard-container {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid var(--border-glass);
+    padding: 1.25rem 1rem;
+    flex-direction: column;
+    align-items: stretch;
+    position: relative;
+    background: rgba(9, 13, 22, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .sidebar-logo {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+
+  .sidebar .glass-panel {
+    margin-bottom: 1rem !important;
+    padding: 0.75rem !important;
+  }
+
+  .nav-links {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+  }
+
+  .nav-links::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari, Opera */
+  }
+
+  .nav-item {
+    flex-shrink: 0;
+  }
+
+  .nav-item a {
+    white-space: nowrap;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .nav-item a:hover, .nav-item.active a {
+    border-left: none;
+    border-bottom: 2px solid var(--primary);
+    border-radius: 8px 8px 0 0;
+  }
+
+  .sidebar button.btn-secondary {
+    margin-top: 0.75rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .main-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Force side-by-side grids to stack vertically */
+  .main-content > div,
+  .main-content > form,
+  .main-content > div > div {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important;
+  }
+
+  /* Form columns grid stacking */
+  .form-group + div {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+
+  /* Ensure table elements wrap inside scrollable parents */
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--border-glass);
+    border-radius: 8px;
+  }
+
+  th, td {
+    padding: 0.75rem 1rem !important;
+  }
+}
