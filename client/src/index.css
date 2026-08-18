@@ -3,22 +3,22 @@
 :root {
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   
-  /* Color Palette (Deep slate, rich indigo accents, emerald highlights) */
-  --bg-dark: #090d16;
-  --bg-card: rgba(17, 24, 39, 0.7);
-  --border-glass: rgba(255, 255, 255, 0.08);
+  /* Color Palette (Premium White-based Light Glassmorphic Theme) */
+  --bg-dark: #f8fafc;
+  --bg-card: rgba(255, 255, 255, 0.55);
+  --border-glass: rgba(15, 23, 42, 0.08);
   --border-focus: rgba(99, 102, 241, 0.4);
   
-  --primary: #6366f1; /* Indigo */
-  --primary-hover: #4f46e5;
-  --secondary: #10b981; /* Emerald */
+  --primary: #4f46e5; /* Indigo */
+  --primary-hover: #3730a3;
+  --secondary: #059669; /* Emerald */
   
-  --text-main: #f3f4f6;
-  --text-muted: #9ca3af;
-  --text-inverse: #090d16;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-inverse: #ffffff;
   
-  --gradient-main: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-  --gradient-dark: radial-gradient(circle at top, #1e1b4b 0%, #090d16 100%);
+  --gradient-main: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  --gradient-dark: radial-gradient(circle at top, #f0f4ff 0%, #f8fafc 100%);
 }
 
 * {
@@ -41,17 +41,17 @@ body {
 /* Glassmorphism Container styling */
 .glass-panel {
   background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border-glass);
   border-radius: 16px;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.04);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-panel:hover {
-  border-color: rgba(99, 102, 241, 0.2);
-  box-shadow: 0 12px 40px 0 rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: 0 12px 40px 0 rgba(99, 102, 241, 0.08);
   transform: translateY(-2px);
 }
 
@@ -90,7 +90,7 @@ body {
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(15, 23, 42, 0.04);
   border-color: var(--text-muted);
 }
 
@@ -113,7 +113,7 @@ body {
   width: 100%;
   padding: 0.75rem 1rem;
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.65);
   border: 1px solid var(--border-glass);
   border-radius: 8px;
   color: var(--text-main);
@@ -124,7 +124,7 @@ body {
 
 .form-input:focus {
   border-color: var(--primary);
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 0 0 4px var(--border-focus);
 }
 
@@ -170,7 +170,7 @@ body {
 }
 
 .sidebar {
-  background: rgba(10, 15, 30, 0.8);
+  background: rgba(255, 255, 255, 0.45);
   border-right: 1px solid var(--border-glass);
   padding: 2rem 1.5rem;
   display: flex;
@@ -207,8 +207,8 @@ body {
 }
 
 .nav-item a:hover, .nav-item.active a {
-  color: var(--text-main);
-  background: rgba(99, 102, 241, 0.15);
+  color: var(--primary);
+  background: rgba(99, 102, 241, 0.08);
   border-left: 3px solid var(--primary);
 }
 
@@ -377,9 +377,9 @@ body {
   height: 380px;
   display: flex;
   flex-direction: column;
-  background: rgba(10, 15, 30, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(15, 23, 42, 0.05);
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
   transform: perspective(1000px) rotateY(-15deg) rotateX(10deg);
   transition: transform 0.5s ease, border-color 0.3s ease;
 }
@@ -391,7 +391,7 @@ body {
 
 .preview-header {
   height: 40px;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.3);
   border-bottom: 1px solid var(--border-glass);
   display: flex;
   align-items: center;
@@ -435,17 +435,17 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(15, 23, 42, 0.02);
 }
 
 .preview-nav-item {
   height: 24px;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(15, 23, 42, 0.03);
 }
 
 .preview-nav-item.active {
-  background: rgba(99, 102, 241, 0.2);
+  background: rgba(99, 102, 241, 0.1);
   border-left: 2px solid var(--primary);
 }
 
@@ -739,7 +739,7 @@ body {
     flex-direction: column;
     align-items: stretch;
     position: relative;
-    background: rgba(9, 13, 22, 0.95);
+    background: rgba(255, 255, 255, 0.75);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
   }
